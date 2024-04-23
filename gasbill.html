@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Calculate Gas Bill</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
+</head>
+<body>
+    <div class="container mt-5">
+        <div class="row justify-content-center">
+            <div class="col-md-6">
+                <div class="card">
+                    <div class="card-header">
+                        <h5 class="card-title">Calculate Gas Bill</h5>
+                    </div>
+                    <div class="card-body">
+                        <form id="billForm">
+                            <div class="mb-3">
+                                <label for="meterNumber" class="form-label">Meter Number:</label>
+                                <input type="text" class="form-control" id="meterNumber" name="meterNumber" required>
+                            </div>
+                            <div class="mb-3">
+                                <label for="consumerName" class="form-label">Consumer Name:</label>
+                                <input type="text" class="form-control" id="consumerName" name="consumerName" required>
+                            </div>
+                            <div class="mb-3">
+                                <label for="readingDate" class="form-label">Reading Date:</label>
+                                <input type="date" class="form-control" id="readingDate" name="readingDate" required>
+                            </div>
+                            <div class="mb-3">
+                                <label for="prevReading" class="form-label">Previous Reading (m³):</label>
+                                <input type="number" class="form-control" id="prevReading" name="prevReading" required>
+                            </div>
+                            <div class="mb-3">
+                                <label for="currReading" class="form-label">Current Reading (m³):</label>
+                                <input type="number" class="form-control" id="currReading" name="currReading" required>
+                            </div>
+                        </form>
+
+                        <!-- Table to display bill information -->
+                        <div id="billDetails" class="mt-4" style="display: none;">
+                            <h5>Gas Bill Details</h5>
+                            <table class="table">
+                                <tbody>
+                                    <tr>
+                                        <td><strong>Meter Number:</strong></td>
+                                        <td id="displayMeterNumber"></td>
+                                    </tr>
+                                    <tr>
+                                        <td><strong>Consumer Name:</strong></td>
+                                        <td id="displayConsumerName"></td>
+                                    </tr>
+                                    <tr>
+                                        <td><strong>Reading Date:</strong></td>
+                                        <td id="displayReadingDate"></td>
+                                    </tr>
+                                    <tr>
+                                        <td><strong>Previous Reading (m³):</strong></td>
+                                        <td id="displayPrevReading"></td>
+                                    </tr>
+                                    <tr>
+                                        <td><strong>Current Reading (m³):</strong></td>
+                                        <td id="displayCurrReading"></td>
+                                    </tr>
+                                    <tr>
+                                        <td><strong>Total Consumption (m³):</strong></td>
+                                        <td id="displayTotalConsumption"></td>
+                                    </tr>
+                                    <tr>
+                                        <td><strong>Cost per m³ ($):</strong></td>
+                                        <td id="displayCostPerUnit"></td>
+                                    </tr>
+                                    <tr>
+                                        <td><strong>Total Bill Amount ($):</strong></td>
+                                        <td id="displayTotalAmount"></td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                    <div class="card-footer text-end">
+                        <button type="button" class="btn btn-primary" onclick="calculateBill()">Calculate</button>
+                        <button type="button" class="btn btn-success" onclick="payAndPrint()">Pay and Generate Invoice</button>
+                        <button type="button" class="btn btn-secondary" onclick="refreshPage()">Calculate Again</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Bootstrap JavaScript Bundle with Popper -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
+
+    <script>
+        function calculateBill() {
+            var meterNumber = document.getElementById("meterNumber").value;
+            var consumerName = document.getElementById("consumerName").value;
+            var readingDate = document.getElementById("readingDate").value;
+            var prevReading = parseFloat(document.getElementById("prevReading").value);
+            var currReading = parseFloat(document.getElementById("currReading").value);
+            var totalConsumption = currReading - prevReading;
+            var costPerUnit = 1.2; // Assuming a fixed cost per unit
+            var totalAmount = totalConsumption * costPerUnit;
+
+            // Display bill details in the table
+            document.getElementById("displayMeterNumber").innerText = meterNumber;
+            document.getElementById("displayConsumerName").innerText = consumerName;
+            document.getElementById("displayReadingDate").innerText = readingDate;
+            document.getElementById("displayPrevReading").innerText = prevReading;
+            document.getElementById("displayCurrReading").innerText = currReading;
+            document.getElementById("displayTotalConsumption").innerText = totalConsumption;
+            document.getElementById("displayCostPerUnit").innerText = costPerUnit.toFixed(2);
+            document.getElementById("displayTotalAmount").innerText = totalAmount.toFixed(2);
+
+            // Show the bill details table
+            document.getElementById("billDetails").style.display = "block";
+            // Hide the form
+            document.getElementById("billForm").style.display = "none";
+        }
+
+        function payAndPrint() {
+            window.print();
+        }
+
+        function refreshPage() {
+            window.location.reload();
+        }
+    </script>
+</body>
+</html>

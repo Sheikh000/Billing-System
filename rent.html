@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Rental Payment</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
+</head>
+<body>
+    <div class="container mt-5">
+        <div class="row justify-content-center">
+            <div class="col-md-6">
+                <div class="card">
+                    <div class="card-header">
+                        <h5 class="card-title">Rental Payment</h5>
+                    </div>
+                    <div class="card-body">
+                        <form id="paymentForm">
+                            <div class="mb-3">
+                                <label for="tenantName" class="form-label">Tenant Name:</label>
+                                <input type="text" class="form-control" id="tenantName" name="tenantName" required>
+                            </div>
+                            <div class="mb-3">
+                                <label for="contactNumber" class="form-label">Contact Number:</label>
+                                <input type="tel" class="form-control" id="contactNumber" name="contactNumber" required>
+                            </div>
+                            <div class="mb-3">
+                                <label for="emailAddress" class="form-label">Email Address:</label>
+                                <input type="email" class="form-control" id="emailAddress" name="emailAddress" required>
+                            </div>
+                            <div class="mb-3">
+                                <label for="paymentMethod" class="form-label">Payment Method:</label>
+                                <select class="form-select" id="paymentMethod" name="paymentMethod" required>
+                                    <option value="" selected disabled>Select Payment Method</option>
+                                    <option value="Paytm">Paytm</option>
+                                    <option value="Google Pay">Google Pay</option>
+                                    <option value="UPI">UPI</option>
+                                    <option value="Net Banking">Net Banking</option>
+                                </select>
+                            </div>
+                            <div class="mb-3">
+                                <label for="rentAmount" class="form-label">Rent Amount ($):</label>
+                                <input type="number" class="form-control" id="rentAmount" name="rentAmount" required>
+                            </div>
+                            <div class="mb-3">
+                                <label for="rentalPeriodStart" class="form-label">Rental Period Start:</label>
+                                <input type="date" class="form-control" id="rentalPeriodStart" name="rentalPeriodStart" required>
+                            </div>
+                            <div class="mb-3">
+                                <label for="rentalPeriodEnd" class="form-label">Rental Period End:</label>
+                                <input type="date" class="form-control" id="rentalPeriodEnd" name="rentalPeriodEnd" required>
+                            </div>
+                            <div class="mb-3">
+                                <label for="maintenanceFees" class="form-label">Maintenance Fees ($):</label>
+                                <input type="number" class="form-control" id="maintenanceFees" name="maintenanceFees">
+                            </div>
+                            <div class="mb-3">
+                                <label for="latePaymentFees" class="form-label">Late Payment Fees ($):</label>
+                                <input type="number" class="form-control" id="latePaymentFees" name="latePaymentFees">
+                            </div>
+                            <button type="button" class="btn btn-primary" onclick="calculatePayment()">Calculate</button>
+                        </form>
+
+                        <!-- Calculations -->
+                        <div id="paymentDetails" class="mt-4" style="display: none;">
+                            <h5>Payment Details</h5>
+                            <table class="table">
+                                <tbody>
+                                    <tr>
+                                        <td><strong>Tenant Name:</strong></td>
+                                        <td id="displayTenantName"></td>
+                                    </tr>
+                                    <tr>
+                                        <td><strong>Contact Number:</strong></td>
+                                        <td id="displayContactNumber"></td>
+                                    </tr>
+                                    <tr>
+                                        <td><strong>Email Address:</strong></td>
+                                        <td id="displayEmailAddress"></td>
+                                    </tr>
+                                    <tr>
+                                        <td><strong>Payment Method:</strong></td>
+                                        <td id="displayPaymentMethod"></td>
+                                    </tr>
+                                    <tr>
+                                        <td><strong>Rent Amount ($):</strong></td>
+                                        <td id="displayRentAmount"></td>
+                                    </tr>
+                                    <tr>
+                                        <td><strong>Rental Period Start:</strong></td>
+                                        <td id="displayRentalPeriodStart"></td>
+                                    </tr>
+                                    <tr>
+                                        <td><strong>Rental Period End:</strong></td>
+                                        <td id="displayRentalPeriodEnd"></td>
+                                    </tr>
+                                    <tr>
+                                        <td><strong>Maintenance Fees ($):</strong></td>
+                                        <td id="displayMaintenanceFees"></td>
+                                    </tr>
+                                    <tr>
+                                        <td><strong>Late Payment Fees ($):</strong></td>
+                                        <td id="displayLatePaymentFees"></td>
+                                    </tr>
+                                    <tr>
+                                        <td><strong>Total Amount Due ($):</strong></td>
+                                        <td id="displayTotalAmountDue"></td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                    <div class="card-footer text-end">
+                        <button type="button" class="btn btn-success" onclick="payAndGenerateInvoice()">Pay and Generate Invoice</button>
+                        <button type="button" class="btn btn-secondary" onclick="calculateAgain()">Calculate Again</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Bootstrap JavaScript Bundle with Popper -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
+
+    <script>
+        function calculatePayment() {
+            var tenantName = document.getElementById("tenantName").value;
+            var contactNumber = document.getElementById("contactNumber").value;
+            var emailAddress = document.getElementById("emailAddress").value;
+            var paymentMethod = document.getElementById("paymentMethod").value;
+            var rentAmount = parseFloat(document.getElementById("rentAmount").value) || 0;
+            var rentalPeriodStart = new Date(document.getElementById("rentalPeriodStart").value);
+            var rentalPeriodEnd = new Date(document.getElementById("rentalPeriodEnd").value);
+            var maintenanceFees = parseFloat(document.getElementById("maintenanceFees").value) || 0;
+            var latePaymentFees = parseFloat(document.getElementById("latePaymentFees").value) || 0;
+
+            // Calculate total amount due
+            var totalAmountDue = rentAmount + maintenanceFees + latePaymentFees;
+
+            // Display payment details
+            document.getElementById("displayTenantName").innerText = tenantName;
+            document.getElementById("displayContactNumber").innerText = contactNumber;
+            document.getElementById("displayEmailAddress").innerText = emailAddress;
+            document.getElementById("displayPaymentMethod").innerText = paymentMethod;
+            document.getElementById("displayRentAmount").innerText = rentAmount.toFixed(2);
+            document.getElementById("displayRentalPeriodStart").innerText = rentalPeriodStart.toDateString();
+            document.getElementById("displayRentalPeriodEnd").innerText = rentalPeriodEnd.toDateString();
+            document.getElementById("displayMaintenanceFees").innerText = maintenanceFees.toFixed(2);
+            document.getElementById("displayLatePaymentFees").innerText = latePaymentFees.toFixed(2);
+            document.getElementById("displayTotalAmountDue").innerText = totalAmountDue.toFixed(2);
+
+            // Show payment details
+            document.getElementById("paymentDetails").style.display = "block";
+
+            // Hide form fields
+            document.getElementById("paymentForm").style.display = "none";
+        }
+
+        function payAndGenerateInvoice() {
+            window.print();
+        }
+
+        function calculateAgain() {
+            location.reload();
+        }
+    </script>
+</body>
+</html>
