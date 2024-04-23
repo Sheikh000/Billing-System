@@ -11,19 +11,19 @@ This repository contains HTML files for a budgeting web application that allows 
 - [Budgeting](#budgeting)
 
 ## Rental Payment
-- **File:** [rental_payment.html](rental_payment.html)
+- **File:** [rental_payment.html](rent.html)
 - **Description:** HTML file for calculating rental payments. Allows users to input tenant information, rent amount, rental period, maintenance fees, and late payment fees. Provides options to calculate payment details, generate invoices, and recalculate.
 
 ## Gas Bill Calculation
-- **File:** [gas_bill_calculation.html](gas_bill_calculation.html)
+- **File:** [gas_bill_calculation.html](gasbill.html)
 - **Description:** HTML file for calculating gas bills. Users can input meter number, consumer name, reading date, previous reading, and current reading to calculate the total bill amount. Provides options to calculate bill details, pay and generate invoices, and recalculate.
 
 ## Electricity Bill Calculation
-- **File:** [electricity_bill_calculation.html](electricity_bill_calculation.html)
+- **File:** [electricity_bill_calculation.html](electricitybill.html)
 - **Description:** HTML file for calculating electricity bills. Users can input meter number, consumer name, month, mode of payment, number of units consumed, and rate per unit to calculate the total bill amount. Provides options to calculate bill details, pay and generate invoices, and recalculate.
 
 ## Budgeting
-- **File:** [budgeting.html](budgeting.html)
+- **File:** [budgeting.html](Budgeting.html)
 - **Description:** HTML file for budgeting expenses. Users can select a month, specify the number of bills, and input expense details like category, amount, and date. Provides options to generate a table for expense entry, calculate total expenses, generate invoices, and recalculate.
 
 Feel free to explore each HTML file for detailed implementation.
