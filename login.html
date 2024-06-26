@@ -5,33 +5,33 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>LOGIN</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
-     <!-- Bootstrap CSS -->
+    <!-- Bootstrap CSS -->
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
     <!-- Font Awesome CSS -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
     <style>
         body {
-               background-color: #f8f9fa;
-               color: #495057;
-           }
-           .navbar {
-               background-color: #007bff; /* Same color as welcome section */
-           }
-           .navbar-brand {
-               color: #ffffff; /* White color for brand */
-               font-weight: bold;
-           }
-           .navbar-nav .nav-link {
-               color: #ffffff; /* White color for links */
-           }
-           .card-header{
-          background-color: #80bcfcfe;
+            background-color: #f8f9fa;
+            color: #495057;
         }
-     </style>
+        .navbar {
+            background-color: #007bff; /* Same color as welcome section */
+        }
+        .navbar-brand {
+            color: #ffffff; /* White color for brand */
+            font-weight: bold;
+        }
+        .navbar-nav .nav-link {
+            color: #ffffff; /* White color for links */
+        }
+        .card-header {
+            background-color: #80bcfcfe;
+        }
+    </style>
 </head>
 <body>
-     <!-- navbar -->
-     <nav class="navbar navbar-expand-lg navbar-light sticky-top">
+    <!-- navbar -->
+    <nav class="navbar navbar-expand-lg navbar-light sticky-top">
         <div class="container-fluid">
             <a class="navbar-brand" href="#">Household Billing System</a>
             <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNavDropdown" aria-controls="navbarNavDropdown" aria-expanded="false" aria-label="Toggle navigation">
@@ -42,79 +42,93 @@
                     <li class="nav-item">
                         <a class="nav-link active" aria-current="page" href="index.html">Home</a>
                     </li>
-                    
                     <li class="nav-item dropdown">
                         <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
                             Login & Signup
                         </a>
                         <ul class="dropdown-menu">
                             <li><a class="dropdown-item" href="login.html">Login</a></li>
-                            <li><a class="dropdown-item" href="./signup.html">Signup</a></li>
+                            <li><a class="dropdown-item" href="signup.html">Signup</a></li>
                         </ul>
                     </li>
                 </ul>
             </div>
         </div>
     </nav>
-      <!-- login -->
-      <div class="container mt-5">
+    <!-- login -->
+    <div class="container mt-5">
         <div class="row justify-content-center">
-          <div class="col-md-6">
-            <div class="card">
-              <div class="card-header">
-                <h3 class="text-center">Login</h3>
-              </div>
-              <div class="card-body">
-                <form>
-                  <div class="form-group">
-                    <label for="email">Email Address</label>
-                    <input type="email" class="form-control" id="email" placeholder="Enter email">
-                  </div>
-                  <div class="form-group">
-                    <label for="password">Password</label>
-                    <div class="input-group">
-                      <input type="password" class="form-control" id="password" placeholder="Enter password">
-                      <div class="input-group-append">
-                        <button class="btn btn-outline-secondary" type="button" id="togglePassword"><i class="fas fa-eye"></i></button>
-                      </div>
+            <div class="col-md-6">
+                <div class="card">
+                    <div class="card-header">
+                        <h3 class="text-center">Login</h3>
                     </div>
-                  </div>
-                  <button type="submit" class="btn btn-primary btn-block">Login</button>
-                </form>
-              </div>
-              <div class="card-footer text-center">
-                <small>Don't have an account? <a href="signup.html">Sign Up</a></small>
-              </div>
+                    <div class="card-body">
+                        <form id="loginForm" action="index.html" method="get">
+                            <div class="form-group">
+                                <label for="email">Email Address</label>
+                                <input type="email" class="form-control" id="email" name="email" placeholder="Enter email" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="password">Password</label>
+                                <div class="input-group">
+                                    <input type="password" class="form-control" id="password" name="password" placeholder="Enter password" required>
+                                    <div class="input-group-append">
+                                        <button class="btn btn-outline-secondary" type="button" id="togglePassword"><i class="fas fa-eye"></i></button>
+                                    </div>
+                                </div>
+                            </div>
+                            <button type="submit" class="btn btn-primary btn-block">Login</button>
+                        </form>
+                    </div>
+                    <div class="card-footer text-center">
+                        <small>Don't have an account? <a href="signup.html">Sign Up</a></small>
+                    </div>
+                </div>
             </div>
-          </div>
         </div>
-      </div>
+    </div>
     
-      <!-- Bootstrap JS and Font Awesome JS -->
-      <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
-      <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.4/dist/umd/popper.min.js"></script>
-      <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
-      <!-- Font Awesome JS -->
-      <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/js/all.min.js"></script>
-      <script>
+    <!-- Bootstrap JS and Font Awesome JS -->
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.4/dist/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/js/all.min.js"></script>
+    <script>
         $(function() {
-          $('#togglePassword').click(function() {
-            var passwordInput = $('#password');
-            var icon = $(this).find('i');
+            $('#togglePassword').click(function() {
+                var passwordInput = $('#password');
+                var icon = $(this).find('i');
     
-            if (passwordInput.attr('type') === 'password') {
-              passwordInput.attr('type', 'text');
-              icon.removeClass('fa-eye');
-              icon.addClass('fa-eye-slash');
-            } else {
-              passwordInput.attr('type', 'password');
-              icon.removeClass('fa-eye-slash');
-              icon.addClass('fa-eye');
+                if (passwordInput.attr('type') === 'password') {
+                    passwordInput.attr('type', 'text');
+                    icon.removeClass('fa-eye');
+                    icon.addClass('fa-eye-slash');
+                } else {
+                    passwordInput.attr('type', 'password');
+                    icon.removeClass('fa-eye-slash');
+                    icon.addClass('fa-eye');
+                }
+            });
+
+            function validateForm() {
+                var email = $('#email').val();
+                var password = $('#password').val();
+                if (email && password) {
+                    $('#loginButton').prop('disabled', false);
+                } else {
+                    $('#loginButton').prop('disabled', true);
+                }
             }
-          });
+
+            $('#email, #password').on('input', validateForm);
+
+            $('#loginForm').submit(function(event) {
+                event.preventDefault(); // Prevent form submission
+                window.location.href = 'index.html'; // Redirect to index.html
+            });
         });
-      </script>
-     
+    </script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
 </body>
 </html>
