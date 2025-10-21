@@ -9,18 +9,13 @@
       rel="stylesheet"
       integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH"
       crossorigin="anonymous" />
-    <!-- Bootstrap CSS -->
-    <link
-      rel="stylesheet"
-      href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" />
     <!-- Font Awesome CSS -->
     <link
       rel="stylesheet"
-      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" />
-    <!-- Bootstrap Datepicker CSS -->
-    <link
-      rel="stylesheet"
-      href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.9.0/css/bootstrap-datepicker.min.css" />
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css"
+      integrity="sha512-DTOQO9RWCH3ppGqcWaEA1BIZOC6xxalwEsw9c2QQeAIftl+Vegovlnee1c9QX4TctnWMn13TZye+giMm8e2LwA=="
+      crossorigin="anonymous"
+      referrerpolicy="no-referrer" />
     <style>
       body {
         background-color: #f8f9fa;
@@ -93,7 +88,7 @@
               <h3 class="text-center">Sign Up</h3>
             </div>
             <div class="card-body">
-              <form id="signupForm" action="index.html" method="get">
+              <form id="signupForm">
                 <div class="form-group">
                   <label for="email">Email Address</label>
                   <input
@@ -124,14 +119,12 @@
                       name="password"
                       placeholder="Enter password"
                       required />
-                    <div class="input-group-append">
-                      <button
-                        class="btn btn-outline-secondary"
-                        type="button"
-                        id="togglePassword">
-                        <i class="fas fa-eye"></i>
-                      </button>
-                    </div>
+                    <button
+                      class="btn btn-outline-secondary"
+                      type="button"
+                      id="togglePassword">
+                      <i class="fas fa-eye"></i>
+                    </button>
                   </div>
                 </div>
                 <div class="form-group">
@@ -146,25 +139,14 @@
                 </div>
                 <div class="form-group">
                   <label for="age">Age</label>
-                  <div class="input-group">
-                    <input
-                      type="text"
-                      class="form-control"
-                      id="age"
-                      name="age"
-                      placeholder="Choose your age"
-                      required />
-                    <div class="input-group-append">
-                      <button
-                        class="btn btn-outline-secondary"
-                        type="button"
-                        id="agePicker">
-                        <i class="fas fa-calendar-alt"></i>
-                      </button>
-                    </div>
-                  </div>
+                  <input
+                    type="date"
+                    class="form-control"
+                    id="age"
+                    name="age"
+                    required />
                 </div>
-                <div class="form-group">
+                <div class="form-group mb-3">
                   <label for="city">City</label>
                   <input
                     type="text"
@@ -174,7 +156,7 @@
                     placeholder="Enter your city"
                     required />
                 </div>
-                <button type="submit" class="btn btn-primary btn-block">
+                <button type="submit" class="btn btn-primary w-100">
                   Sign Up
                 </button>
               </form>
@@ -188,41 +170,62 @@
         </div>
       </div>
     </div>
-    <br /><br /><br /><br /><br /><br /><br /><br /><br /><br />
 
-    <!-- Bootstrap JS and Font Awesome JS -->
-    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.4/dist/umd/popper.min.js"></script>
-    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
-    <!-- Font Awesome JS -->
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/js/all.min.js"></script>
-    <!-- Bootstrap Datepicker JS -->
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.9.0/js/bootstrap-datepicker.min.js"></script>
+    <!-- Bootstrap JS -->
+    <script
+      src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"
+      integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz"
+      crossorigin="anonymous"></script>
+
     <script>
-      $(function () {
-        $("#age").datepicker({
-          format: "yyyy-mm-dd",
-          autoclose: true,
-          endDate: "-1d",
-          todayHighlight: true,
+      document.addEventListener("DOMContentLoaded", function () {
+        // --- Password Toggle ---
+        const togglePassword = document.querySelector("#togglePassword");
+        const passwordInput = document.querySelector("#password");
+        const icon = togglePassword.querySelector("i");
+
+        togglePassword.addEventListener("click", function () {
+          const type =
+            passwordInput.getAttribute("type") === "password"
+              ? "text"
+              : "password";
+          passwordInput.setAttribute("type", type);
+          icon.classList.toggle("fa-eye-slash");
         });
 
-        $("#agePicker").click(function () {
-          $("#age").datepicker("show");
-        });
+        // --- Form Submission ---
+        const signupForm = document.getElementById("signupForm");
+        signupForm.addEventListener("submit", async function (event) {
+          event.preventDefault(); // Prevent default browser submission
 
-        $("#togglePassword").click(function () {
-          var passwordInput = $("#password");
-          var icon = $(this).find("i");
+          // Collect form data
+          const formData = new FormData(signupForm);
+          const data = Object.fromEntries(formData.entries());
 
-          if (passwordInput.attr("type") === "password") {
-            passwordInput.attr("type", "text");
-            icon.removeClass("fa-eye");
-            icon.addClass("fa-eye-slash");
-          } else {
-            passwordInput.attr("type", "password");
-            icon.removeClass("fa-eye-slash");
-            icon.addClass("fa-eye");
+          try {
+            const response = await fetch(
+              "http://localhost:3001/api/auth/signup",
+              {
+                method: "POST",
+                headers: {
+                  "Content-Type": "application/json",
+                },
+                body: JSON.stringify(data),
+              }
+            );
+
+            const result = await response.json();
+
+            if (response.ok) {
+              alert(result.message); // "User registered successfully"
+              window.location.href = "login.html"; // Redirect to login page
+            } else {
+              // Show error message from the server (e.g., "User already exists")
+              alert(`Error: ${result.message}`);
+            }
+          } catch (error) {
+            console.error("Signup failed:", error);
+            alert("An error occurred during signup. Please try again.");
           }
         });
       });
