@@ -109,6 +109,12 @@
             <li class="nav-item">
               <a class="nav-link" href="#contact-us">Contact Us</a>
             </li>
+            <li
+              class="nav-item"
+              id="history-link-container"
+              style="display: none">
+              <a class="nav-link" href="history.html"> History </a>
+            </li>
             <li class="nav-item dropdown" id="auth-dropdown">
               <a
                 class="nav-link dropdown-toggle"
@@ -294,15 +300,20 @@
           "logout-button-container"
         );
         const logoutButton = document.getElementById("logout-button");
+        const historyLinkContainer = document.getElementById(
+          "history-link-container"
+        );
 
         if (token) {
           // User is logged in
           authDropdown.style.display = "none"; // Hide Login/Signup
           logoutButtonContainer.style.display = "block"; // Show Logout
+          historyLinkContainer.style.display = "block"; // Show History
         } else {
           // User is not logged in
           authDropdown.style.display = "block"; // Show Login/Signup
           logoutButtonContainer.style.display = "none"; // Hide Logout
+          historyLinkContainer.style.display = "none"; // Hide History
         }
 
         logoutButton.addEventListener("click", function (event) {

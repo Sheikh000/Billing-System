@@ -46,6 +46,7 @@ app.get("/health", (req, res) => {
 
 // 5. Define API routes
 app.use("/api/auth", require("./routes/auth"));
+app.use("/api/bills", require("./routes/bills"));
 
 // 6. Start the server and listen for incoming requests
 app.listen(PORT, () => {

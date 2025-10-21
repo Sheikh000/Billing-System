@@ -142,7 +142,7 @@
               <button
                 type="button"
                 class="btn btn-success"
-                onclick="payAndPrint()">
+                onclick="saveAndPrint()">
                 Pay and Generate Invoice
               </button>
               <button
@@ -164,34 +164,92 @@
       crossorigin="anonymous"></script>
 
     <script>
+      function getBillData() {
+        const meterNumber = document.getElementById("meterNumber").value;
+        const consumerName = document.getElementById("consumerName").value;
+        const month = document.getElementById("month").value;
+        const modeOfPayment = document.getElementById("modeOfPayment").value;
+        const units = parseFloat(document.getElementById("units").value);
+        const rate = parseFloat(document.getElementById("rate").value);
+
+        // Basic validation
+        if (
+          !meterNumber ||
+          !consumerName ||
+          !month ||
+          !modeOfPayment ||
+          isNaN(units) ||
+          isNaN(rate)
+        ) {
+          alert("Please fill all fields correctly.");
+          return null;
+        }
+
+        const totalAmount = units * rate;
+
+        return {
+          meterNumber,
+          consumerName,
+          month,
+          modeOfPayment,
+          units,
+          rate,
+          totalAmount,
+        };
+      }
+
       function calculateBill() {
-        var meterNumber = document.getElementById("meterNumber").value;
-        var consumerName = document.getElementById("consumerName").value;
-        var month = document.getElementById("month").value;
-        var modeOfPayment = document.getElementById("modeOfPayment").value;
-        var units = parseFloat(document.getElementById("units").value);
-        var rate = parseFloat(document.getElementById("rate").value);
-        var totalAmount = units * rate;
+        const billData = getBillData();
+        if (!billData) return;
 
         // Display bill details in the table
-        document.getElementById("displayMeterNumber").innerText = meterNumber;
-        document.getElementById("displayConsumerName").innerText = consumerName;
-        document.getElementById("displayMonth").innerText = month;
+        document.getElementById("displayMeterNumber").innerText =
+          billData.meterNumber;
+        document.getElementById("displayConsumerName").innerText =
+          billData.consumerName;
+        document.getElementById("displayMonth").innerText = billData.month;
         document.getElementById("displayModeOfPayment").innerText =
-          modeOfPayment;
-        document.getElementById("displayUnits").innerText = units;
-        document.getElementById("displayRate").innerText = rate;
+          billData.modeOfPayment;
+        document.getElementById("displayUnits").innerText = billData.units;
+        document.getElementById("displayRate").innerText = billData.rate;
         document.getElementById("displayTotalAmount").innerText =
-          totalAmount.toFixed(2);
+          billData.totalAmount.toFixed(2);
 
         // Show the bill details table and hide the form
         document.getElementById("billForm").style.display = "none";
         document.getElementById("billDetails").style.display = "block";
       }
 
-      function payAndPrint() {
-        calculateBill(); // Calculate bill details before printing
-        window.print(); // Print the page
+      async function saveAndPrint() {
+        calculateBill(); // First, display the bill on the page
+        const billData = getBillData();
+        if (!billData) return;
+
+        const token = localStorage.getItem("token");
+
+        try {
+          const response = await fetch(
+            "http://localhost:3001/api/bills/electricity",
+            {
+              method: "POST",
+              headers: {
+                "Content-Type": "application/json",
+                "x-auth-token": token,
+              },
+              body: JSON.stringify(billData),
+            }
+          );
+
+          if (response.ok) {
+            window.print(); // Print the page only after successful save
+          } else {
+            const error = await response.json();
+            alert("Error saving bill: " + (error.msg || "Please try again."));
+          }
+        } catch (error) {
+          console.error("Failed to save bill:", error);
+          alert("Could not connect to the server to save the bill.");
+        }
       }
 
       function refreshPage() {

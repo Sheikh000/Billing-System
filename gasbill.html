@@ -130,7 +130,7 @@
               <button
                 type="button"
                 class="btn btn-success"
-                onclick="payAndPrint()">
+                onclick="saveAndPrint()">
                 Pay and Generate Invoice
               </button>
               <button
@@ -152,32 +152,68 @@
       crossorigin="anonymous"></script>
 
     <script>
-      function calculateBill() {
-        var meterNumber = document.getElementById("meterNumber").value;
-        var consumerName = document.getElementById("consumerName").value;
-        var readingDate = document.getElementById("readingDate").value;
-        var prevReading = parseFloat(
+      function getBillData() {
+        const meterNumber = document.getElementById("meterNumber").value;
+        const consumerName = document.getElementById("consumerName").value;
+        const readingDate = document.getElementById("readingDate").value;
+        const prevReading = parseFloat(
           document.getElementById("prevReading").value
         );
-        var currReading = parseFloat(
+        const currReading = parseFloat(
           document.getElementById("currReading").value
         );
-        var totalConsumption = currReading - prevReading;
-        var costPerUnit = 1.2; // Assuming a fixed cost per unit
-        var totalAmount = totalConsumption * costPerUnit;
+
+        if (
+          !meterNumber ||
+          !consumerName ||
+          !readingDate ||
+          isNaN(prevReading) ||
+          isNaN(currReading) ||
+          currReading < prevReading
+        ) {
+          alert(
+            "Please fill all fields correctly. Current reading must be greater than previous reading."
+          );
+          return null;
+        }
+
+        const totalConsumption = currReading - prevReading;
+        const costPerUnit = 1.2; // Assuming a fixed cost per unit
+        const totalAmount = totalConsumption * costPerUnit;
+
+        return {
+          meterNumber,
+          consumerName,
+          readingDate,
+          prevReading,
+          currReading,
+          totalConsumption,
+          costPerUnit,
+          totalAmount,
+        };
+      }
+
+      function calculateBill() {
+        const billData = getBillData();
+        if (!billData) return;
 
         // Display bill details in the table
-        document.getElementById("displayMeterNumber").innerText = meterNumber;
-        document.getElementById("displayConsumerName").innerText = consumerName;
-        document.getElementById("displayReadingDate").innerText = readingDate;
-        document.getElementById("displayPrevReading").innerText = prevReading;
-        document.getElementById("displayCurrReading").innerText = currReading;
+        document.getElementById("displayMeterNumber").innerText =
+          billData.meterNumber;
+        document.getElementById("displayConsumerName").innerText =
+          billData.consumerName;
+        document.getElementById("displayReadingDate").innerText =
+          billData.readingDate;
+        document.getElementById("displayPrevReading").innerText =
+          billData.prevReading;
+        document.getElementById("displayCurrReading").innerText =
+          billData.currReading;
         document.getElementById("displayTotalConsumption").innerText =
-          totalConsumption;
+          billData.totalConsumption;
         document.getElementById("displayCostPerUnit").innerText =
-          costPerUnit.toFixed(2);
+          billData.costPerUnit.toFixed(2);
         document.getElementById("displayTotalAmount").innerText =
-          totalAmount.toFixed(2);
+          billData.totalAmount.toFixed(2);
 
         // Show the bill details table
         document.getElementById("billDetails").style.display = "block";
@@ -185,8 +221,26 @@
         document.getElementById("billForm").style.display = "none";
       }
 
-      function payAndPrint() {
-        window.print();
+      async function saveAndPrint() {
+        calculateBill();
+        const billData = getBillData();
+        if (!billData) return;
+
+        const token = localStorage.getItem("token");
+        try {
+          const response = await fetch("http://localhost:3001/api/bills/gas", {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+              "x-auth-token": token,
+            },
+            body: JSON.stringify(billData),
+          });
+          if (response.ok) window.print();
+          else alert("Error saving bill.");
+        } catch (error) {
+          alert("Could not connect to the server to save the bill.");
+        }
       }
 
       function refreshPage() {

@@ -187,7 +187,7 @@
               <button
                 type="button"
                 class="btn btn-success"
-                onclick="payAndGenerateInvoice()">
+                onclick="saveAndPrint()">
                 Pay and Generate Invoice
               </button>
               <button
@@ -209,56 +209,108 @@
       crossorigin="anonymous"></script>
 
     <script>
-      function calculatePayment() {
-        var tenantName = document.getElementById("tenantName").value;
-        var contactNumber = document.getElementById("contactNumber").value;
-        var emailAddress = document.getElementById("emailAddress").value;
-        var paymentMethod = document.getElementById("paymentMethod").value;
-        var rentAmount =
+      function getPaymentData() {
+        const tenantName = document.getElementById("tenantName").value;
+        const contactNumber = document.getElementById("contactNumber").value;
+        const emailAddress = document.getElementById("emailAddress").value;
+        const paymentMethod = document.getElementById("paymentMethod").value;
+        const rentAmount =
           parseFloat(document.getElementById("rentAmount").value) || 0;
-        var rentalPeriodStart = new Date(
-          document.getElementById("rentalPeriodStart").value
-        );
-        var rentalPeriodEnd = new Date(
-          document.getElementById("rentalPeriodEnd").value
-        );
-        var maintenanceFees =
+        const rentalPeriodStart =
+          document.getElementById("rentalPeriodStart").value;
+        const rentalPeriodEnd =
+          document.getElementById("rentalPeriodEnd").value;
+        const maintenanceFees =
           parseFloat(document.getElementById("maintenanceFees").value) || 0;
-        var latePaymentFees =
+        const latePaymentFees =
           parseFloat(document.getElementById("latePaymentFees").value) || 0;
 
-        // Calculate total amount due
-        var totalAmountDue = rentAmount + maintenanceFees + latePaymentFees;
+        if (
+          !tenantName ||
+          !contactNumber ||
+          !emailAddress ||
+          !paymentMethod ||
+          !rentAmount ||
+          !rentalPeriodStart ||
+          !rentalPeriodEnd
+        ) {
+          alert("Please fill all required fields.");
+          return null;
+        }
+
+        const totalAmount = rentAmount + maintenanceFees + latePaymentFees;
+
+        return {
+          tenantName,
+          contactNumber,
+          emailAddress,
+          paymentMethod,
+          rentAmount,
+          rentalPeriodStart,
+          rentalPeriodEnd,
+          maintenanceFees,
+          latePaymentFees,
+          totalAmount,
+        };
+      }
+
+      function calculatePayment() {
+        const paymentData = getPaymentData();
+        if (!paymentData) return;
 
         // Display payment details
-        document.getElementById("displayTenantName").innerText = tenantName;
+        document.getElementById("displayTenantName").innerText =
+          paymentData.tenantName;
         document.getElementById("displayContactNumber").innerText =
-          contactNumber;
-        document.getElementById("displayEmailAddress").innerText = emailAddress;
+          paymentData.contactNumber;
+        document.getElementById("displayEmailAddress").innerText =
+          paymentData.emailAddress;
         document.getElementById("displayPaymentMethod").innerText =
-          paymentMethod;
+          paymentData.paymentMethod;
         document.getElementById("displayRentAmount").innerText =
-          rentAmount.toFixed(2);
+          paymentData.rentAmount.toFixed(2);
         document.getElementById("displayRentalPeriodStart").innerText =
-          rentalPeriodStart.toDateString();
-        document.getElementById("displayRentalPeriodEnd").innerText =
-          rentalPeriodEnd.toDateString();
+          new Date(paymentData.rentalPeriodStart).toDateString();
+        document.getElementById("displayRentalPeriodEnd").innerText = new Date(
+          paymentData.rentalPeriodEnd
+        ).toDateString();
         document.getElementById("displayMaintenanceFees").innerText =
-          maintenanceFees.toFixed(2);
+          paymentData.maintenanceFees.toFixed(2);
         document.getElementById("displayLatePaymentFees").innerText =
-          latePaymentFees.toFixed(2);
+          paymentData.latePaymentFees.toFixed(2);
         document.getElementById("displayTotalAmountDue").innerText =
-          totalAmountDue.toFixed(2);
+          paymentData.totalAmount.toFixed(2);
 
         // Show payment details
         document.getElementById("paymentDetails").style.display = "block";
-
         // Hide form fields
         document.getElementById("paymentForm").style.display = "none";
       }
 
-      function payAndGenerateInvoice() {
-        window.print();
+      async function saveAndPrint() {
+        calculatePayment();
+        const paymentData = getPaymentData();
+        if (!paymentData) return;
+
+        const token = localStorage.getItem("token");
+        try {
+          const response = await fetch("http://localhost:3001/api/bills/rent", {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+              "x-auth-token": token,
+            },
+            body: JSON.stringify(paymentData),
+          });
+
+          if (response.ok) {
+            window.print();
+          } else {
+            alert("Error saving bill.");
+          }
+        } catch (error) {
+          alert("Could not connect to the server to save the bill.");
+        }
       }
 
       function calculateAgain() {
